@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+      'Arial', 'Yu Gothic', 'Meiryo', sans-serif;
+    font-weight: 400;
+  }
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overscroll-behavior: none;
+}
