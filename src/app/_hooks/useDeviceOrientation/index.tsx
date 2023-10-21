@@ -23,7 +23,6 @@ export const useDeviceOrientation = () => {
           // beta: rotation around x-axis
           // gamma: rotation around y-axis
           const { alpha, beta, gamma } = event;
-          console.log(alpha, beta, gamma);
           setOrientation({
             alpha: alpha ?? 0,
             beta: beta ?? 0,

@@ -16,18 +16,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body className="bg-gray-900 text-gray-100">
         <div className="grid h-full w-full grid-cols-[max-content_1fr] overflow-hidden">
           <div className="border-r-2 border-solid border-gray-500">
-            <SideNav
-              list={[
-                {
-                  href: '/',
-                  text: 'トップ',
-                },
-                {
-                  href: '/archive',
-                  text: 'アーカイブ',
-                },
-              ]}
-            />
+            <SideNav />
           </div>
           <main className="overflow-scroll">{children}</main>
         </div>

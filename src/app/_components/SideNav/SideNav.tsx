@@ -1,21 +1,12 @@
-import { Link } from '@/app/_components/Link';
+import { NAV_LIST } from '@/app/_constants/nav';
+import { SideNavItem } from './SideNavItem';
 
-export type SideNavProps = {
-  list: {
-    href: string;
-    text: string;
-  }[];
-};
-export const SideNav: React.FC<SideNavProps> = ({ list }) => {
+export const SideNav = () => {
   return (
     <nav aria-label="サイト全体のナビゲーション" className="p-4">
       <ul>
-        {list.map((nav) => {
-          return (
-            <li key={nav.text}>
-              <Link href={nav.href}>{nav.text}</Link>
-            </li>
-          );
+        {NAV_LIST.map((nav) => {
+          return <SideNavItem key={nav.href} label={nav.label} href={nav.href} />;
         })}
       </ul>
     </nav>
