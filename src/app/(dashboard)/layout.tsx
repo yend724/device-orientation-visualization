@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { SideNav } from '@/app/_components/ui/SideNav';
+import { SideNav } from '@/app/_components/SideNav';
 import { META } from '@/app/_constants/meta';
 import '@/app/_styles/globals.css';
 

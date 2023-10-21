@@ -1,4 +1,4 @@
-import { Clock } from '@/app/_components/ui/Clock';
+import { Clock } from '@/app/_components/Clock';
 
 const Home = () => {
   return (

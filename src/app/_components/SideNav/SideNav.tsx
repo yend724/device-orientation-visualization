@@ -1,4 +1,4 @@
-import { Link } from '@/app/_components/ui/Link';
+import { Link } from '@/app/_components/Link';
 
 export type SideNavProps = {
   list: {
