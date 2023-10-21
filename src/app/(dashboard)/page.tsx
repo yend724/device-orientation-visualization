@@ -1,4 +1,5 @@
 import { Clock } from '@/app/_components/Clock';
+import { LineGraph } from '@/app/_components/LineGraph';
 
 const Home = () => {
   return (
@@ -7,8 +8,7 @@ const Home = () => {
         <Clock />
       </div>
       <div className="grid grid-cols-[1fr_auto] gap-x-8">
-        <div>折れ線グラフ</div>
-        <div>値</div>
+        <LineGraph />
       </div>
     </div>
   );
