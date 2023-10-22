@@ -3,10 +3,11 @@ import { SideNavItem } from './SideNavItem';
 
 export const SideNav = () => {
   return (
-    <nav aria-label="サイト全体のナビゲーション" className="p-4">
-      <ul>
+    <nav aria-label="サイト全体のナビゲーション" className="px-4 py-8">
+      <ul className="space-y-4">
         {NAV_LIST.map((nav) => {
-          return <SideNavItem key={nav.href} label={nav.label} href={nav.href} />;
+          const { href, label } = nav;
+          return <SideNavItem key={href} label={label} href={href} />;
         })}
       </ul>
     </nav>

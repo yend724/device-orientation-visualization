@@ -18,7 +18,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="border-r-2 border-solid border-gray-500">
             <SideNav />
           </div>
-          <main className="overflow-scroll">{children}</main>
+          <main className="overflow-scroll p-8">{children}</main>
         </div>
       </body>
     </html>
