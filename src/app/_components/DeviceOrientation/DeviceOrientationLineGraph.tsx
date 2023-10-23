@@ -2,22 +2,19 @@
 import { useRef, useEffect, useMemo } from 'react';
 import * as d3 from 'd3';
 
-type OrientationValue = {
-  timestamp: number;
-  value: number;
-};
 type DeviceOrientationLineGraphProps = {
-  gummaData: OrientationValue[];
-  alphaData: OrientationValue[];
-  betaData: OrientationValue[];
+  orientationData: {
+    timestamp: number;
+    gamma: number;
+    alpha: number;
+    beta: number;
+  }[];
   width?: number;
   height?: number;
 };
 
 export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProps> = ({
-  gummaData,
-  alphaData,
-  betaData,
+  orientationData,
   width = 640,
   height = 320,
 }) => {
@@ -38,22 +35,41 @@ export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProp
 
   const line = d3
     .line()
-    .x((_, i) => x(-1 * i))
+    .x((d) => x(d[0]))
     .y((d) => y(d[1]));
-  // lineのX軸をセット
+
+  const now = orientationData[0].timestamp;
+  const { gamma, alpha, beta } = orientationData.reduce(
+    (acc, d) => {
+      const x = ((now - d.timestamp) / 1000) * -1;
+      if (x < -30) return acc;
+      const nextValue = {
+        gamma: [[x, d.gamma], ...acc.gamma] as [number, number][],
+        alpha: [[x, d.alpha], ...acc.alpha] as [number, number][],
+        beta: [[x, d.beta], ...acc.beta] as [number, number][],
+      };
+      return nextValue;
+    },
+    {
+      gamma: [] as [number, number][],
+      alpha: [] as [number, number][],
+      beta: [] as [number, number][],
+    },
+  );
 
   useEffect(() => {
     const targetElement = gx.current;
-    if (targetElement) {
-      d3.select(targetElement).call(
-        d3.axisBottom(x).tickFormat((d) => {
-          if (d === 0) {
-            return '0秒';
-          }
-          return `${d}`;
-        }),
-      );
-    }
+    if (!targetElement) return;
+
+    d3.select(targetElement).call(
+      d3.axisBottom(x).tickFormat((d) => {
+        if (d === 0) {
+          return '0秒前';
+        }
+        return `${d}`;
+      }),
+    );
+
     return () => {
       d3.select(targetElement).selectAll('g').remove();
     };
@@ -61,20 +77,21 @@ export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProp
 
   useEffect(() => {
     const targetElement = gy.current;
-    if (targetElement) {
-      d3.select(targetElement).call(
-        d3
-          .axisLeft(y)
-          .tickValues([-180, -90, 0, 90, 180, 270, 360])
-          .tickSize(-innerWidth)
-          .tickFormat((d) => {
-            if (d === 360) {
-              return '360deg';
-            }
-            return `${d}`;
-          }),
-      );
-    }
+    if (!targetElement) return;
+
+    d3.select(targetElement).call(
+      d3
+        .axisLeft(y)
+        .tickValues([-180, -90, 0, 90, 180, 270, 360])
+        .tickSize(-innerWidth)
+        .tickFormat((d) => {
+          if (d === 360) {
+            return '360deg';
+          }
+          return `${d}`;
+        }),
+    );
+
     return () => {
       d3.select(targetElement).selectAll('g').remove();
     };
@@ -90,21 +107,21 @@ export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProp
         fill="none"
         stroke="red"
         strokeWidth="1.5"
-        d={line(gummaData.map((d) => [d.timestamp, d.value]))!}
+        d={line(alpha)!}
       />
       <path
         transform={`translate(${margin.left + 40}, ${margin.top})`}
         fill="none"
         stroke="green"
         strokeWidth="1.5"
-        d={line(alphaData.map((d) => [d.timestamp, d.value]))!}
+        d={line(gamma)!}
       />
       <path
         transform={`translate(${margin.left + 40}, ${margin.top})`}
         fill="none"
         stroke="blue"
         strokeWidth="1.5"
-        d={line(betaData.map((d) => [d.timestamp, d.value]))!}
+        d={line(beta)!}
       />
     </svg>
   );

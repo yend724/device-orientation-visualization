@@ -4,10 +4,6 @@ import { useDeviceOrientation } from '@/app/_hooks/useDeviceOrientation';
 import { DeviceOrientationLineGraph } from './DeviceOrientationLineGraph';
 import { DeviceOrientationValues } from './DeviceOrientationValues';
 
-const initialData = () => {
-  return Array.from({ length: 31 }, () => ({ timestamp: -1, value: 0 }));
-};
-
 export const DeviceOrientation = () => {
   const { alpha, gamma, beta } = useDeviceOrientation();
 
@@ -16,9 +12,14 @@ export const DeviceOrientation = () => {
 
   const [size, setSize] = useState({ width: 0, height: 0 });
 
-  const [gammaData, setGummaData] = useState<ReturnType<typeof initialData>>(initialData());
-  const [alphaData, setAlphaData] = useState<ReturnType<typeof initialData>>(initialData());
-  const [betaData, setBetaData] = useState<ReturnType<typeof initialData>>(initialData());
+  const [orientationData, setOrientationData] = useState([
+    {
+      timestamp: Date.now(),
+      alpha: 0,
+      gamma: 0,
+      beta: 0,
+    },
+  ]);
 
   const callbackRef = useCallback((node: HTMLDivElement) => {
     if (node === null) {
@@ -37,35 +38,29 @@ export const DeviceOrientation = () => {
     };
   }, []);
 
-  const lastUpdateRef = useRef(0);
-  const timeAccumulatorRef = useRef(0);
-
-  const updateData = useCallback((timestamp: number) => {
-    const delta = timestamp - lastUpdateRef.current;
-    lastUpdateRef.current = timestamp;
-    timeAccumulatorRef.current += delta;
-
-    while (timeAccumulatorRef.current >= 1000) {
-      const now = Date.now();
-      setAlphaData((prev) => {
-        const newData = [{ timestamp: now, value: orientationRef.current.alpha }, ...prev];
-        return newData.slice(0, 31);
-      });
-      setBetaData((prev) => {
-        const newData = [{ timestamp: now, value: orientationRef.current.beta }, ...prev];
-        return newData.slice(0, 31);
-      });
-      setGummaData((prev) => {
-        const newData = [{ timestamp: now, value: orientationRef.current.gamma }, ...prev];
-        return newData.slice(0, 31);
-      });
-      timeAccumulatorRef.current -= 1000;
-    }
+  const updateData = useCallback(() => {
+    const now = Date.now();
+    const length = 60 * 30 + 1;
+    setOrientationData((prev) => {
+      const newData = [
+        {
+          timestamp: now,
+          alpha: orientationRef.current.alpha,
+          gamma: orientationRef.current.gamma,
+          beta: orientationRef.current.beta,
+        },
+        ...prev,
+      ];
+      return newData.slice(0, length);
+    });
     requestAnimationFrame(updateData);
   }, []);
 
   useEffect(() => {
-    requestAnimationFrame(updateData);
+    const requestAnimationFrameId = requestAnimationFrame(updateData);
+    return () => {
+      cancelAnimationFrame(requestAnimationFrameId);
+    };
   }, [updateData]);
 
   return (
@@ -75,9 +70,7 @@ export const DeviceOrientation = () => {
           <DeviceOrientationLineGraph
             width={size.width}
             height={size.height}
-            gummaData={gammaData}
-            alphaData={alphaData}
-            betaData={betaData}
+            orientationData={orientationData}
           />
         </div>
       </div>

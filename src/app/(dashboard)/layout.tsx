@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SideNav } from '@/app/_components/SideNav';
+import { FpsView } from '@/app/_components/FpsView';
 import { META } from '@/app/_constants/meta';
 import '@/app/_styles/globals.css';
 
@@ -19,9 +20,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             <SideNav />
           </div>
           <main className="grid grid-cols-[1fr_2rem] overflow-scroll py-8 pl-8 after:content-['']">
-            <div className="">{children}</div>
+            <div>{children}</div>
           </main>
         </div>
+        <FpsView />
       </body>
     </html>
   );
