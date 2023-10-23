@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    box-sizing: border-box;
+  }
   :root {
     font-family: 'Helvetica Neue', 'Helvetica', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
       'Arial', 'Yu Gothic', 'Meiryo', sans-serif;

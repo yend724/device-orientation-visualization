@@ -103,24 +103,25 @@ export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProp
       <g ref={gx} transform={`translate(${margin.left + 40},${height - margin.bottom})`} />
       <g ref={gy} transform={`translate(${margin.left + 40},${margin.bottom})`} />
       <path
+        className="stroke-rose-300"
         transform={`translate(${margin.left + 40}, ${margin.top})`}
         fill="none"
-        stroke="red"
-        strokeWidth="1.5"
+        strokeWidth="2"
         d={line(alpha)!}
       />
       <path
+        className="stroke-green-300"
         transform={`translate(${margin.left + 40}, ${margin.top})`}
         fill="none"
-        stroke="green"
-        strokeWidth="1.5"
+        strokeWidth="2"
         d={line(gamma)!}
       />
       <path
+        className="stroke-sky-300"
         transform={`translate(${margin.left + 40}, ${margin.top})`}
         fill="none"
         stroke="blue"
-        strokeWidth="1.5"
+        strokeWidth="2"
         d={line(beta)!}
       />
     </svg>

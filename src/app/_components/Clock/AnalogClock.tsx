@@ -8,14 +8,14 @@ export const AnalogClock: React.FC<AnalogClockProps> = ({ dateTime }) => {
   const { hours, minutes, seconds } = splitDateTime(dateTime);
 
   return (
-    <div className="relative h-[200px] w-[200px] rounded-full bg-gray-700">
+    <div className="relative h-[200px] w-[200px] rounded-full bg-neutral-800">
       <div
         style={{ '--rotate-deg': `${(hours + minutes / 60) * 30 - 90}deg` } as CSSProperties}
-        className="absolute left-1/2 top-1/2 z-10 h-[6px] w-[30%] origin-[center_left] rotate-[var(--rotate-deg)] bg-white"
+        className="absolute left-1/2 top-1/2 z-10 h-[6px] w-[30%] origin-[center_left] rotate-[var(--rotate-deg)] bg-neutral-50"
       ></div>
       <div
         style={{ '--rotate-deg': `${minutes * 6 - 90}deg` } as CSSProperties}
-        className="absolute left-1/2 top-1/2 z-10 h-[4px] w-[40%] origin-[center_left] rotate-[var(--rotate-deg)] bg-white"
+        className="absolute left-1/2 top-1/2 z-10 h-[4px] w-[40%] origin-[center_left] rotate-[var(--rotate-deg)] bg-neutral-50"
       ></div>
       <div
         style={{ '--rotate-deg': `${seconds * 6 - 90}deg` } as CSSProperties}

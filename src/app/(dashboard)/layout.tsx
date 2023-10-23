@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Header } from '@/app/_components/Header';
 import { SideNav } from '@/app/_components/SideNav';
 import { FpsView } from '@/app/_components/FpsView';
 import { META } from '@/app/_constants/meta';
@@ -14,12 +15,15 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="ja">
-      <body className="bg-gray-900 text-gray-100">
-        <div className="grid h-full w-full grid-cols-[max-content_1fr] overflow-hidden">
-          <div className="border-r-2 border-solid border-gray-500">
-            <SideNav />
+      <body className="bg-neutral-950 text-neutral-100">
+        <div className="grid h-full w-full grid-cols-[max-content_1fr] grid-rows-[auto_1fr] overflow-hidden">
+          <div className="col-span-2">
+            <Header />
           </div>
-          <main className="grid grid-cols-[1fr_2rem] overflow-scroll py-8 pl-8 after:content-['']">
+          <aside>
+            <SideNav />
+          </aside>
+          <main className="grid grid-cols-[1fr_1rem] overflow-scroll py-8 pl-4 after:content-['']">
             <div>{children}</div>
           </main>
         </div>

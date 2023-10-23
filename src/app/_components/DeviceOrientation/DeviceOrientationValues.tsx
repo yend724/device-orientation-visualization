@@ -10,28 +10,38 @@ export const DeviceOrientationValues: React.FC<DeviceOrientationValuesProps> = (
 }) => {
   return (
     <dl className="space-y-8">
-      <DeviceOrientationValue label="alpha" value={alpha} color="red" />
-      <DeviceOrientationValue label="gamma" value={gamma} color="green" />
-      <DeviceOrientationValue label="beta" value={beta} color="blue" />
+      <DeviceOrientationValue type="alpha" value={alpha} />
+      <DeviceOrientationValue type="gamma" value={gamma} />
+      <DeviceOrientationValue type="beta" value={beta} />
     </dl>
   );
 };
 
+const valueMap = {
+  alpha: {
+    bgColor: 'bg-rose-300',
+    color: 'text-neutral-900',
+  },
+  gamma: {
+    bgColor: 'bg-green-300',
+    color: 'text-neutral-900',
+  },
+  beta: {
+    bgColor: 'bg-sky-300',
+    color: 'text-neutral-900',
+  },
+};
+
 const DeviceOrientationValue: React.FC<{
-  label: string;
+  type: keyof typeof valueMap;
   value: number;
-  color: React.CSSProperties['color'];
-}> = ({ label, value, color }) => {
+}> = ({ type, value }) => {
   return (
-    <div className="grid min-w-[8rem] border-separate grid-rows-2 gap-y-2 rounded-md border-2 border-solid p-4">
-      <dt>{label} の値</dt>
-      <dd
-        style={{
-          color,
-        }}
-      >
-        {value}
-      </dd>
+    <div
+      className={`grid min-w-[8rem] grid-rows-2 gap-y-2 rounded-md p-4 ${valueMap[type].bgColor} ${valueMap[type].color}`}
+    >
+      <dt>{type} の値</dt>
+      <dd>{value}</dd>
     </div>
   );
 };
