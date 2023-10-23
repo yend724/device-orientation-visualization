@@ -6,13 +6,7 @@ export type AnalogClockProps = {
 };
 export const AnalogClock: React.FC<AnalogClockProps> = ({ dateTime }) => {
   const { hours, minutes, seconds } = splitDateTime(dateTime);
-  const PI = Math.PI;
-  const PI_2 = PI * 2;
-  const deg_60 = (PI_2 / 360) * 60;
-  const deg_30 = (PI_2 / 360) * 12;
 
-  const a = Math.cos(deg_30);
-  console.log(a);
   return (
     <div className="relative h-[200px] w-[200px] rounded-full bg-gray-700">
       <div
