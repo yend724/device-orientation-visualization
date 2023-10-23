@@ -6,6 +6,13 @@ export type AnalogClockProps = {
 };
 export const AnalogClock: React.FC<AnalogClockProps> = ({ dateTime }) => {
   const { hours, minutes, seconds } = splitDateTime(dateTime);
+  const PI = Math.PI;
+  const PI_2 = PI * 2;
+  const deg_60 = (PI_2 / 360) * 60;
+  const deg_30 = (PI_2 / 360) * 12;
+
+  const a = Math.cos(deg_30);
+  console.log(a);
   return (
     <div className="relative h-[200px] w-[200px] rounded-full bg-gray-700">
       <div
@@ -21,9 +28,17 @@ export const AnalogClock: React.FC<AnalogClockProps> = ({ dateTime }) => {
         className="absolute left-1/2 top-1/2 z-10 h-[4px]  w-[40%] origin-[center_left] rotate-[var(--rotate-deg)] bg-orange-500"
       ></div>
       <ol className="relative h-full w-full text-center [&>li]:-translate-x-1/2 [&>li]:-translate-y-1/2">
+        <li className="absolute left-[70%] top-[14%]">1</li>
+        <li className="absolute left-[86%] top-[28%]">2</li>
         <li className="absolute left-[90%] top-[50%]">3</li>
+        <li className="absolute left-[86%] top-[72%]">4</li>
+        <li className="absolute left-[70%] top-[86%]">5</li>
         <li className="absolute left-[50%] top-[90%]">6</li>
+        <li className="absolute left-[30%] top-[86%]">7</li>
+        <li className="absolute left-[14%] top-[72%]">8</li>
         <li className="absolute left-[10%] top-[50%]">9</li>
+        <li className="absolute left-[14%] top-[28%]">10</li>
+        <li className="absolute left-[30%] top-[14%]">11</li>
         <li className="absolute left-[50%] top-[10%]">12</li>
       </ol>
     </div>
