@@ -37,5 +37,7 @@ export const useDeviceOrientation = () => {
     };
   }, []);
 
-  return orientation;
+  return {
+    ...orientation,
+  };
 };
