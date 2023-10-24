@@ -8,11 +8,13 @@ type SideNavItemProps = {
 };
 export const SideNavItem: React.FC<SideNavItemProps> = ({ href, label }) => {
   const pathname = usePathname();
-  const ariaCurrent = href === pathname ? 'page' : undefined;
+  const isActive = href === pathname;
+  const ariaCurrent = isActive ? 'page' : undefined;
+  const nonActiveClass = !isActive ? 'text-neutral-100/50' : undefined;
 
   return (
     <li>
-      <Link href={href} aria-current={ariaCurrent}>
+      <Link className={nonActiveClass} href={href} aria-current={ariaCurrent}>
         {label}
       </Link>
     </li>

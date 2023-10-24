@@ -1,3 +1,4 @@
+import { VALUE_MAP } from './constants';
 export type DeviceOrientationValuesProps = {
   alpha: number;
   gamma: number;
@@ -17,28 +18,14 @@ export const DeviceOrientationValues: React.FC<DeviceOrientationValuesProps> = (
   );
 };
 
-const valueMap = {
-  alpha: {
-    bgColor: 'bg-rose-300',
-    color: 'text-neutral-900',
-  },
-  gamma: {
-    bgColor: 'bg-green-300',
-    color: 'text-neutral-900',
-  },
-  beta: {
-    bgColor: 'bg-sky-300',
-    color: 'text-neutral-900',
-  },
-};
-
-const DeviceOrientationValue: React.FC<{
-  type: keyof typeof valueMap;
+type DeviceOrientationValueProps = {
+  type: keyof typeof VALUE_MAP;
   value: number;
-}> = ({ type, value }) => {
+};
+const DeviceOrientationValue: React.FC<DeviceOrientationValueProps> = ({ type, value }) => {
   return (
     <div
-      className={`grid min-w-[8rem] grid-rows-2 gap-y-2 rounded-md p-4 ${valueMap[type].bgColor} ${valueMap[type].color}`}
+      className={`grid min-w-[8rem] grid-rows-2 gap-y-2 rounded-md p-4 ${VALUE_MAP[type].bgColor} ${VALUE_MAP[type].color}`}
     >
       <dt>{type} の値</dt>
       <dd>{value}</dd>
