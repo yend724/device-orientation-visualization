@@ -11,6 +11,9 @@
       'Arial', 'Yu Gothic', 'Meiryo', sans-serif;
     font-weight: 400;
   }
+  dialog::backdrop {
+    backdrop-filter: blur(0.5rem);
+  }
 }
 
 html,

@@ -6,7 +6,7 @@
     "test": "jest",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "serve out",
     "lint": "next lint --fix --dir src",
     "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json}'",
     "format": "npm run prettier && npm run lint"
@@ -47,6 +47,7 @@
     "postcss": "^8",
     "prettier": "^3.0.3",
     "react-fps": "^1.0.6",
+    "serve": "^14.2.1",
     "tailwindcss": "^3",
     "typescript": "^5"
   }
