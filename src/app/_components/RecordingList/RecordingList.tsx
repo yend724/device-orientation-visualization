@@ -1,5 +1,6 @@
 import { Link } from '@/app/_components/Link';
 import { Button } from '@/app/_components/Button';
+import { createPath } from '@/app/_utils/url';
 
 type RangeStore = {
   start: number;
@@ -7,17 +8,9 @@ type RangeStore = {
 }[];
 export type RecordingListProps = {
   recodingList: RangeStore;
-  onSelect: (key: number) => void;
   onDelete: (key: number) => void;
 };
-export const RecordingList: React.FC<RecordingListProps> = ({
-  recodingList,
-  onSelect,
-  onDelete,
-}) => {
-  const handleSelect = (key: number) => {
-    onSelect(key);
-  };
+export const RecordingList: React.FC<RecordingListProps> = ({ recodingList, onDelete }) => {
   const handleDelete = (key: number) => {
     onDelete(key);
   };
@@ -29,9 +22,9 @@ export const RecordingList: React.FC<RecordingListProps> = ({
         {recodingList.map((record) => {
           const { start, end } = record;
           return (
-            <li key={record.start}>
+            <li key={start}>
               <div className="flex items-center gap-x-4">
-                <Link href="#" onClick={() => handleSelect(start)}>
+                <Link href={createPath('/archive', { recordKey: start })}>
                   {new Date(start).toLocaleString()} ~ {new Date(end).toLocaleString()}の録画
                 </Link>
                 <Button size="small" variant="secondary" onClick={() => handleDelete(start)}>

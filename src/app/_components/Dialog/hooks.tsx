@@ -2,7 +2,7 @@
 import { useRef, useCallback } from 'react';
 
 export const useDialog = () => {
-  const ref = useRef<HTMLDialogElement>(null);
+  const ref = useRef<HTMLDialogElement | null>(null);
 
   const warning = () => {
     console.warn('Dialog is not mounted');

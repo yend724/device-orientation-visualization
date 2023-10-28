@@ -1,4 +1,4 @@
-import { DeviceOrientationRangeGraph } from './DeviceOrientationRangeGraph';
+import { LineGraph } from './LineGraph';
 
 type DeviceOrientationRangeProps = {
   orientationData: {
@@ -11,11 +11,6 @@ type DeviceOrientationRangeProps = {
 export const DeviceOrientationRange: React.FC<DeviceOrientationRangeProps> = ({
   orientationData,
 }) => {
-  if (orientationData.length === 0) return <div>選択されていません</div>;
-
-  return (
-    <div>
-      <DeviceOrientationRangeGraph orientationData={orientationData} />
-    </div>
-  );
+  if (orientationData.length === 0) return <p>選択されていません</p>;
+  return <LineGraph orientationData={orientationData} width={640} height={320} />;
 };
