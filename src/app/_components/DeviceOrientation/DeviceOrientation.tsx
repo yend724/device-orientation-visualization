@@ -8,19 +8,19 @@ import { saveOrientationData } from '@/app/_utils/indexedDB';
 import { Record } from '@/app/_components/Record';
 
 const length = 60 * 30 + 1;
-const initialData = Array.from({ length }).map((_, i) => ({
-  timestamp: 0,
-  alpha: 0,
-  gamma: 0,
-  beta: 0,
-}));
+type OrientationData = {
+  timestamp: number;
+  alpha: number;
+  gamma: number;
+  beta: number;
+}[];
 export const DeviceOrientation = () => {
   const { alpha, gamma, beta } = useDeviceOrientation();
 
   const orientationRef = useRef({ alpha, gamma, beta });
   orientationRef.current = { alpha, gamma, beta };
   const [size, setSize] = useState({ width: 0, height: 0 });
-  const [orientationData, setOrientationData] = useState(initialData);
+  const [orientationData, setOrientationData] = useState<OrientationData>([]);
 
   const orientationDataRef = useRef<typeof orientationData>([]);
   const [isRecording, setIsRecording] = useState(false);
