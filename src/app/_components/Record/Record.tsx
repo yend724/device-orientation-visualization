@@ -1,22 +1,36 @@
-'use client';
+'use clinet';
 import { Button } from '@/app/_components/Button';
 import { Dialog, useDialog } from '@/app/_components/Dialog';
+import { getText } from './utils';
 
-export const Record = () => {
+export type RecordProps = {
+  isRecording?: boolean;
+  onStart?: () => void;
+  onStop?: () => void;
+};
+export const Record: React.FC<RecordProps> = ({ isRecording, onStart, onStop }) => {
   const { ref, open, close } = useDialog();
+  const handleAction = () => {
+    if (isRecording) {
+      onStop?.();
+    } else {
+      onStart?.();
+    }
+    close();
+  };
+
+  const text = getText(isRecording);
+
   return (
     <>
       <Button onClick={open}>
-        <span>録画</span>
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-4" role="img">
-          <circle cx="100" cy="100" r="100" fill="red" />
-        </svg>
+        <span>{text.trigger}する</span>
       </Button>
       <Dialog ref={ref}>
-        <h2 className="px-6 py-4 text-lg">録画を開始しますか？</h2>
+        <h2 className="px-6 py-4 text-lg">{text.title}を開始しますか？</h2>
         <div className="flex gap-4 px-6 py-4 text-end">
-          <Button onClick={close} size="small">
-            録画する
+          <Button onClick={handleAction} size="small">
+            {text.action}する
           </Button>
           <Button onClick={close} autoFocus variant="secondary" size="small">
             キャンセル

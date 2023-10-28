@@ -1,11 +1,11 @@
 'use client';
 import { AnalogClock } from './AnalogClock';
 import { DigitalClock } from './DigitalClock';
-import { useClock } from '@/app/_hooks/useClock';
 
-export const Clock = () => {
-  const { currentTime } = useClock();
-
+type ClockProps = {
+  currentTime: Date;
+};
+export const Clock: React.FC<ClockProps> = ({ currentTime }) => {
   return (
     <div>
       <AnalogClock dateTime={currentTime} />

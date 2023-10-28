@@ -3,22 +3,40 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useDeviceOrientation } from '@/app/_hooks/useDeviceOrientation';
 import { DeviceOrientationLineGraph } from './DeviceOrientationLineGraph';
 import { DeviceOrientationValues } from './DeviceOrientationValues';
+import { convertArrayToBlob } from '@/app/_utils/blob';
+import { saveOrientationData } from '@/app/_utils/indexedDB';
+import { Record } from '@/app/_components/Record';
 
 const length = 60 * 30 + 1;
+const initialData = Array.from({ length }).map((_, i) => ({
+  timestamp: 0,
+  alpha: 0,
+  gamma: 0,
+  beta: 0,
+}));
 export const DeviceOrientation = () => {
   const { alpha, gamma, beta } = useDeviceOrientation();
 
   const orientationRef = useRef({ alpha, gamma, beta });
   orientationRef.current = { alpha, gamma, beta };
   const [size, setSize] = useState({ width: 0, height: 0 });
-  const [orientationData, setOrientationData] = useState([
-    {
-      timestamp: Date.now(),
-      alpha: 0,
-      gamma: 0,
-      beta: 0,
-    },
-  ]);
+  const [orientationData, setOrientationData] = useState(initialData);
+
+  const orientationDataRef = useRef<typeof orientationData>([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const startRecording = () => {
+    setIsRecording(true);
+  };
+  const stopRecording = () => {
+    console.log('stop');
+    setIsRecording(false);
+    const largeDataArray = orientationDataRef.current;
+    const startTimeStamp = largeDataArray[largeDataArray.length - 1].timestamp;
+    const endTimeStamp = largeDataArray[0].timestamp;
+    const blob = convertArrayToBlob(largeDataArray);
+    saveOrientationData(startTimeStamp, endTimeStamp, blob);
+    orientationDataRef.current = [];
+  };
 
   const callbackRef = useCallback((node: HTMLDivElement) => {
     if (node === null) {
@@ -41,16 +59,18 @@ export const DeviceOrientation = () => {
     let requestAnimationFrameId: number;
     const loop = () => {
       const now = Date.now();
+      const { alpha, gamma, beta } = orientationRef.current;
+      const nextData = {
+        timestamp: now,
+        alpha,
+        gamma,
+        beta,
+      };
+      if (isRecording) {
+        orientationDataRef.current = [nextData, ...orientationDataRef.current];
+      }
       setOrientationData((prev) => {
-        const newData = [
-          {
-            timestamp: now,
-            alpha: orientationRef.current.alpha,
-            gamma: orientationRef.current.gamma,
-            beta: orientationRef.current.beta,
-          },
-          ...prev,
-        ];
+        const newData = [nextData, ...prev];
         return newData.slice(0, length);
       });
       requestAnimationFrameId = requestAnimationFrame(loop);
@@ -59,10 +79,10 @@ export const DeviceOrientation = () => {
     return () => {
       cancelAnimationFrame(requestAnimationFrameId);
     };
-  }, []);
+  }, [isRecording]);
 
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-x-8">
+    <div className="grid grid-cols-[1fr_auto] gap-8">
       <div ref={callbackRef} className="relative aspect-video w-full min-w-[40rem]">
         <div className="absolute h-full w-full">
           <DeviceOrientationLineGraph
@@ -74,6 +94,9 @@ export const DeviceOrientation = () => {
       </div>
       <div>
         <DeviceOrientationValues alpha={alpha} gamma={gamma} beta={beta} />
+        <div className="mt-8">
+          <Record onStart={startRecording} onStop={stopRecording} isRecording={isRecording} />
+        </div>
       </div>
     </div>
   );

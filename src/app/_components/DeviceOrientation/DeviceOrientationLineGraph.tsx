@@ -21,7 +21,7 @@ export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProp
   const gx = useRef<SVGSVGElement>(null);
   const gy = useRef<SVGSVGElement>(null);
 
-  const margin = { top: 20, right: 60, bottom: 20, left: 20 };
+  const margin = { top: 20, right: 20, bottom: 20, left: 20 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
@@ -100,25 +100,25 @@ export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProp
   return (
     <svg width={width} height={height}>
       <title>直近30秒間のデバイスの回転の値（alpha、beta、gamma）の折れ線グラフ</title>
-      <g ref={gx} transform={`translate(${margin.left + 40},${height - margin.bottom})`} />
-      <g ref={gy} transform={`translate(${margin.left + 40},${margin.bottom})`} />
+      <g ref={gx} transform={`translate(${margin.left},${height - margin.bottom})`} />
+      <g ref={gy} transform={`translate(${margin.left},${margin.bottom})`} />
       <path
         className="stroke-rose-300"
-        transform={`translate(${margin.left + 40}, ${margin.top})`}
+        transform={`translate(${margin.left}, ${margin.top})`}
         fill="none"
         strokeWidth="2"
         d={line(alpha)!}
       />
       <path
         className="stroke-green-300"
-        transform={`translate(${margin.left + 40}, ${margin.top})`}
+        transform={`translate(${margin.left}, ${margin.top})`}
         fill="none"
         strokeWidth="2"
         d={line(gamma)!}
       />
       <path
         className="stroke-sky-300"
-        transform={`translate(${margin.left + 40}, ${margin.top})`}
+        transform={`translate(${margin.left}, ${margin.top})`}
         fill="none"
         stroke="blue"
         strokeWidth="2"
