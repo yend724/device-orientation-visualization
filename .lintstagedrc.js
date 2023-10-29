@@ -11,7 +11,7 @@ const buildPrettierCommand = (filenames) =>
 const buildTestCommand = () => `jest`;
 
 module.exports = {
-  'src/**/*.test.{js,jsx,ts,tsx,json}': [buildTestCommand],
+  'src/**/*.{js,jsx,ts,tsx,json}': [buildTestCommand],
   'src/**/*.{js,jsx,ts,tsx,json}': [buildPrettierCommand],
   'src/**/*.{js,jsx,ts,tsx,json}': [buildEslintCommand],
 };
