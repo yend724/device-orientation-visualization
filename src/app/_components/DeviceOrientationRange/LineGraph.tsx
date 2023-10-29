@@ -1,12 +1,10 @@
 'use client';
-import { useState, useCallback } from 'react';
-import { useRequestAnimationFrame } from '@/app/_hooks/useRequestAnimationFrame';
-import { Button } from '@/app/_components/Button';
+import { useState, useCallback, useMemo } from 'react';
 import { MainVisualGraph } from './MainViusalGraph';
 import { SeekBar } from './SeekBar';
 
 type LineGraphProps = {
-  orientationData: {
+  data: {
     timestamp: number;
     gamma: number;
     alpha: number;
@@ -14,68 +12,51 @@ type LineGraphProps = {
   }[];
   width: number;
   height: number;
+  currentTimestamp: number;
 };
 export const LineGraph: React.FC<LineGraphProps> = ({
-  orientationData,
+  data,
   width = 640,
   height = 320,
+  currentTimestamp,
 }) => {
   const [rangeTimestamp, setRangeTimestamp] = useState<[number, number] | null>(null);
   const handleBurash = useCallback((selection: [number, number]) => {
     setRangeTimestamp(selection);
   }, []);
 
-  const filterd = orientationData.filter((d) => {
-    if (rangeTimestamp === null) return true;
-    const ts = d.timestamp;
-    const inRange = ts >= rangeTimestamp[0] && ts <= rangeTimestamp[1];
-    return inRange;
-  });
-
-  const data = filterd.length > 1 ? filterd : orientationData;
-
-  const [isRunning, setIsRunning] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const startIsRunning = useCallback(() => {
-    setIsRunning(true);
-  }, []);
-  const stopIsRunning = useCallback(() => {
-    setIsRunning(false);
-  }, []);
-  useRequestAnimationFrame(() => {
-    setProgress((pre) => {
-      if (pre >= orientationData.length - 1) {
-        return 0;
-      }
-      return pre + 1;
+  const filterd = useMemo(() => {
+    return data.filter((d) => {
+      if (rangeTimestamp === null) return true;
+      const ts = d.timestamp;
+      const inRange = ts >= rangeTimestamp[0] && ts <= rangeTimestamp[1];
+      return inRange;
     });
-  }, isRunning);
+  }, [data, rangeTimestamp]);
+
+  const rangeData = filterd.length > 1 ? filterd : data;
 
   return (
     <div>
       <div className="grid gap-y-4">
         <div>
           <MainVisualGraph
-            orientationData={data}
+            data={rangeData}
             width={width}
             height={height}
-            progress={progress}
+            currentTimestamp={currentTimestamp}
           />
         </div>
         <div>
           <span className="inline-block border border-neutral-700">
             <SeekBar
-              orientationData={orientationData}
+              data={data}
               onBrush={handleBurash}
               width={width}
               height={100}
-              progress={progress}
+              currentTimestamp={currentTimestamp}
             />
           </span>
-        </div>
-        <div className="flex gap-x-4">
-          <Button onClick={startIsRunning}>再生</Button>
-          <Button onClick={stopIsRunning}>停止</Button>
         </div>
       </div>
     </div>

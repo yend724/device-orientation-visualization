@@ -3,7 +3,7 @@ import { useRef, useEffect, useMemo } from 'react';
 import * as d3 from 'd3';
 
 type SeekBarProps = {
-  orientationData: {
+  data: {
     timestamp: number;
     gamma: number;
     alpha: number;
@@ -11,22 +11,22 @@ type SeekBarProps = {
   }[];
   width: number;
   height: number;
-  progress: number;
+  currentTimestamp: number;
   onBrush: (selection: [number, number]) => void;
 };
 export const SeekBar: React.FC<SeekBarProps> = ({
-  orientationData,
+  data,
   width,
   height,
-  progress,
+  currentTimestamp,
   onBrush,
 }) => {
   const gx = useRef<SVGSVGElement>(null);
   const gy = useRef<SVGSVGElement>(null);
   const brushRef = useRef<SVGGElement>(null);
 
-  const first = orientationData[0];
-  const last = orientationData[orientationData.length - 1];
+  const first = data[0];
+  const last = data[data.length - 1];
 
   const x = useMemo(() => {
     return d3.scaleLinear().domain([first.timestamp, last.timestamp]).range([0, width]);
@@ -36,21 +36,23 @@ export const SeekBar: React.FC<SeekBarProps> = ({
     return d3.scaleLinear().domain([-180, 360]).range([height, 0]);
   }, [height]);
 
-  const { gamma, alpha, beta } = orientationData.reduce(
-    (acc, d) => {
-      const x = d.timestamp;
-      return {
-        gamma: [[x, d.gamma], ...acc.gamma] as [number, number][],
-        alpha: [[x, d.alpha], ...acc.alpha] as [number, number][],
-        beta: [[x, d.beta], ...acc.beta] as [number, number][],
-      };
-    },
-    {
-      gamma: [] as [number, number][],
-      alpha: [] as [number, number][],
-      beta: [] as [number, number][],
-    },
-  );
+  const { gamma, alpha, beta } = useMemo(() => {
+    return data.reduce(
+      (acc, d) => {
+        const x = d.timestamp;
+        return {
+          gamma: [[x, d.gamma], ...acc.gamma] as [number, number][],
+          alpha: [[x, d.alpha], ...acc.alpha] as [number, number][],
+          beta: [[x, d.beta], ...acc.beta] as [number, number][],
+        };
+      },
+      {
+        gamma: [] as [number, number][],
+        alpha: [] as [number, number][],
+        beta: [] as [number, number][],
+      },
+    );
+  }, [data]);
 
   const brush = useMemo(() => {
     return d3
@@ -62,7 +64,6 @@ export const SeekBar: React.FC<SeekBarProps> = ({
       .on('brush', (event) => {
         const startTimestamp = x.invert(event.selection[0]);
         const endTimestamp = x.invert(event.selection[1]);
-        console.log(startTimestamp < endTimestamp);
         onBrush([startTimestamp, endTimestamp]);
       })
       .on('end', (event) => {
@@ -114,7 +115,7 @@ export const SeekBar: React.FC<SeekBarProps> = ({
     };
   }, [brush]);
 
-  const currentLinePoositionX = x(orientationData[progress].timestamp);
+  const currentLinePoositionX = x(currentTimestamp);
 
   return (
     <svg width={width} height={height}>
@@ -122,15 +123,16 @@ export const SeekBar: React.FC<SeekBarProps> = ({
       <path className="stroke-rose-300" fill="none" strokeWidth="2" d={line(alpha)!} />
       <path className="stroke-green-300" fill="none" strokeWidth="2" d={line(gamma)!} />
       <path className="stroke-sky-300" fill="none" stroke="blue" strokeWidth="2" d={line(beta)!} />
+      <g ref={brushRef} />
       <line
         x1={currentLinePoositionX}
         x2={currentLinePoositionX}
         y1="0"
         y2={height}
         fill="none"
-        stroke="red"
+        stroke="rgb(239 68 68)"
+        strokeWidth={4}
       />
-      <g ref={brushRef} />
     </svg>
   );
 };

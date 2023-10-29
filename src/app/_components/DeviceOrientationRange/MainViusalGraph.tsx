@@ -3,7 +3,7 @@ import { useRef, useEffect, useMemo } from 'react';
 import * as d3 from 'd3';
 
 type MainVisualGraphProps = {
-  orientationData: {
+  data: {
     timestamp: number;
     gamma: number;
     alpha: number;
@@ -11,13 +11,13 @@ type MainVisualGraphProps = {
   }[];
   width: number;
   height: number;
-  progress: number;
+  currentTimestamp: number;
 };
 export const MainVisualGraph: React.FC<MainVisualGraphProps> = ({
-  orientationData,
+  data,
   width,
   height,
-  progress,
+  currentTimestamp,
 }) => {
   const gx = useRef<SVGSVGElement>(null);
   const gy = useRef<SVGSVGElement>(null);
@@ -28,8 +28,8 @@ export const MainVisualGraph: React.FC<MainVisualGraphProps> = ({
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-  const first = orientationData[0];
-  const last = orientationData[orientationData.length - 1];
+  const first = data[0];
+  const last = data[data.length - 1];
 
   const x = useMemo(() => {
     return d3.scaleLinear().domain([first.timestamp, last.timestamp]).range([0, innerWidth]);
@@ -39,22 +39,24 @@ export const MainVisualGraph: React.FC<MainVisualGraphProps> = ({
     return d3.scaleLinear().domain([-180, 360]).range([innerHeight, 0]);
   }, [innerHeight]);
 
-  const { gamma, alpha, beta } = orientationData.reduce(
-    (acc, d) => {
-      const ts = d.timestamp;
-      const nextValue = {
-        gamma: [[ts, d.gamma], ...acc.gamma] as [number, number][],
-        alpha: [[ts, d.alpha], ...acc.alpha] as [number, number][],
-        beta: [[ts, d.beta], ...acc.beta] as [number, number][],
-      };
-      return nextValue;
-    },
-    {
-      gamma: [] as [number, number][],
-      alpha: [] as [number, number][],
-      beta: [] as [number, number][],
-    },
-  );
+  const { gamma, alpha, beta } = useMemo(() => {
+    return data.reduce(
+      (acc, d) => {
+        const ts = d.timestamp;
+        const nextValue = {
+          gamma: [[ts, d.gamma], ...acc.gamma] as [number, number][],
+          alpha: [[ts, d.alpha], ...acc.alpha] as [number, number][],
+          beta: [[ts, d.beta], ...acc.beta] as [number, number][],
+        };
+        return nextValue;
+      },
+      {
+        gamma: [] as [number, number][],
+        alpha: [] as [number, number][],
+        beta: [] as [number, number][],
+      },
+    );
+  }, [data]);
 
   const line = d3
     .line()
@@ -89,7 +91,9 @@ export const MainVisualGraph: React.FC<MainVisualGraphProps> = ({
     };
   }, [gy, y]);
 
-  const currentLinePoositionX = x(orientationData[progress].timestamp);
+  const currentLinePoositionX = x(currentTimestamp);
+  const isCurrentLineVisible =
+    currentTimestamp >= first.timestamp && currentTimestamp <= last.timestamp;
 
   return (
     <svg width={width} height={height}>
@@ -118,15 +122,18 @@ export const MainVisualGraph: React.FC<MainVisualGraphProps> = ({
         strokeWidth="2"
         d={line(beta)!}
       />
-      <line
-        transform={`translate(${margin.left}, ${margin.top})`}
-        x1={currentLinePoositionX}
-        x2={currentLinePoositionX}
-        y1="0"
-        y2={height - margin.bottom - margin.top}
-        fill="none"
-        stroke="red"
-      />
+      {isCurrentLineVisible && (
+        <line
+          transform={`translate(${margin.left}, ${margin.top})`}
+          x1={currentLinePoositionX}
+          x2={currentLinePoositionX}
+          y1="0"
+          y2={height - margin.bottom - margin.top}
+          fill="none"
+          stroke="rgb(239 68 68)"
+          strokeWidth={4}
+        />
+      )}
     </svg>
   );
 };
