@@ -24,7 +24,7 @@ export const RecordingList: React.FC<RecordingListProps> = ({ recodingList, onDe
           return (
             <li key={start}>
               <div className="flex items-center gap-x-4">
-                <Link href={createPath('/archive', { recordKey: start })}>
+                <Link href={createPath(`${location.pathname}`, { recordKey: start })}>
                   {new Date(start).toLocaleString()} ~ {new Date(end).toLocaleString()}の録画
                 </Link>
                 <Button size="small" variant="secondary" onClick={() => handleDelete(start)}>

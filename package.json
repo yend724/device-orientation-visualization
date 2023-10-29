@@ -6,8 +6,8 @@
     "test": "jest",
     "dev": "next dev",
     "build": "next build",
-    "deploy": "npm run build && gh-pages -d out",
-    "start": "serve out",
+    "deploy": "npm run build && touch ./out/.nojekyll && gh-pages -d out -t true",
+    "start": "serve -s out",
     "lint": "next lint --fix --dir src",
     "prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json}'",
     "format": "npm run prettier && npm run lint"

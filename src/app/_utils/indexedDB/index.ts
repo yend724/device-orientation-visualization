@@ -1,13 +1,10 @@
-export const opneIndexedDB = (
-  dbName: string,
-  version = 1,
-  onUpgradeneeded?: (request: IDBOpenDBRequest) => void,
-): Promise<IDBOpenDBRequest> => {
+export const opneIndexedDB = (dbName: string, version = 1): Promise<IDBOpenDBRequest> => {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(dbName, version);
-
     request.addEventListener('upgradeneeded', () => {
-      onUpgradeneeded?.(request);
+      const db = request.result;
+      db.createObjectStore('recordStore', { autoIncrement: true });
+      db.createObjectStore('rangeStore', { autoIncrement: true });
     });
 
     request.addEventListener('success', () => {
@@ -22,11 +19,7 @@ export const opneIndexedDB = (
 };
 
 export const saveOrientationData = async (start: number, end: number, data: Blob) => {
-  const request = await opneIndexedDB('DeviceOrientationVisualizationDB', 1, (request) => {
-    const db = request.result;
-    db.createObjectStore('recordStore', { autoIncrement: true });
-    db.createObjectStore('rangeStore', { autoIncrement: true });
-  });
+  const request = await opneIndexedDB('DeviceOrientationVisualizationDB', 1);
 
   const db = request.result;
   const objectStoreNames = db.objectStoreNames;

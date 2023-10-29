@@ -1,10 +1,10 @@
 export const NAV_LIST = [
   {
-    label: 'Home',
+    label: 'ホーム',
     href: '/',
   },
   {
-    label: 'Archive',
-    href: '/archive',
+    label: '録画',
+    href: '/archive/',
   },
 ] as const;

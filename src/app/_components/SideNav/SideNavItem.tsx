@@ -14,7 +14,7 @@ export const SideNavItem: React.FC<SideNavItemProps> = ({ href, label }) => {
 
   return (
     <li>
-      <Link className={nonActiveClass} href={href} aria-current={ariaCurrent}>
+      <Link className={nonActiveClass} href={href} aria-current={ariaCurrent} underline="none">
         {label}
       </Link>
     </li>

@@ -28,7 +28,6 @@ export const DeviceOrientation = () => {
     setIsRecording(true);
   };
   const stopRecording = () => {
-    console.log('stop');
     setIsRecording(false);
     const largeDataArray = orientationDataRef.current;
     const startTimeStamp = largeDataArray[largeDataArray.length - 1].timestamp;
