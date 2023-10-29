@@ -30,7 +30,6 @@ export const DeviceOrientationRange: React.FC<DeviceOrientationRangeProps> = ({
     const absortController = new AbortController();
 
     const handleResize = () => {
-      console.log('reseze');
       setSize({ width: node.clientWidth, height: node.clientHeight });
     };
     handleResize();
