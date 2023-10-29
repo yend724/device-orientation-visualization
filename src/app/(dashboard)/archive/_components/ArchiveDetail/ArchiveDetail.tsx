@@ -55,16 +55,16 @@ export const ArchiveDetail: React.FC<ArchiveDetailProps> = ({ recordKey }) => {
     return <p>読み込み中...</p>;
   }
 
-  const currentTimestamp = selectedRecordData[progress].timestamp;
+  const currentData = selectedRecordData[progress];
   return (
     <div className="grid gap-y-12">
       <Link href="/archive">録画一覧に戻る</Link>
       <div className="grid grid-cols-[auto_1fr] gap-x-8">
         <div>
-          <Clock currentTime={new Date(currentTimestamp)} />
+          <Clock currentTime={new Date(currentData.timestamp)} />
         </div>
         <div>
-          <DeviceOrientationRange data={selectedRecordData} currentTimestamp={currentTimestamp} />
+          <DeviceOrientationRange data={selectedRecordData} currentData={currentData} />
         </div>
       </div>
       <div className="flex gap-x-4">

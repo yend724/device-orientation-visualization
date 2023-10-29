@@ -12,13 +12,18 @@ type LineGraphProps = {
   }[];
   width: number;
   height: number;
-  currentTimestamp: number;
+  currentData: {
+    timestamp: number;
+    gamma: number;
+    alpha: number;
+    beta: number;
+  };
 };
 export const LineGraph: React.FC<LineGraphProps> = ({
   data,
   width = 640,
   height = 320,
-  currentTimestamp,
+  currentData,
 }) => {
   const [rangeTimestamp, setRangeTimestamp] = useState<[number, number] | null>(null);
   const handleBurash = useCallback((selection: [number, number]) => {
@@ -35,29 +40,26 @@ export const LineGraph: React.FC<LineGraphProps> = ({
   }, [data, rangeTimestamp]);
 
   const rangeData = filterd.length > 1 ? filterd : data;
+  const currentTimestamp = currentData.timestamp;
 
   return (
-    <div>
-      <div className="grid gap-y-4">
-        <div>
-          <MainVisualGraph
-            data={rangeData}
-            width={width}
-            height={height}
-            currentTimestamp={currentTimestamp}
-          />
-        </div>
-        <div>
-          <span className="inline-block border border-neutral-700">
-            <SeekBar
-              data={data}
-              onBrush={handleBurash}
-              width={width}
-              height={100}
-              currentTimestamp={currentTimestamp}
-            />
-          </span>
-        </div>
+    <div className="grid gap-y-4">
+      <div>
+        <MainVisualGraph
+          data={rangeData}
+          width={width}
+          height={height - 50 - 16}
+          currentTimestamp={currentTimestamp}
+        />
+      </div>
+      <div className="inline-block border border-neutral-700">
+        <SeekBar
+          data={data}
+          onBrush={handleBurash}
+          width={width}
+          height={50}
+          currentTimestamp={currentTimestamp}
+        />
       </div>
     </div>
   );
