@@ -4,7 +4,7 @@ import { Button } from '@/app/_components/Button';
 import { Link } from '@/app/_components/Link';
 import { readIndexedDBValue } from '@/app/_utils/indexedDB';
 import { readBlob } from '@/app/_utils/blob';
-import { DeviceOrientationRange } from '@/app/_components/DeviceOrientationRange';
+import { DeviceOrientationRecord } from '@/app/_components/DeviceOrientationRecord';
 import { Clock } from '@/app/_components/Clock';
 import { useElapsedTime } from '@/app/_hooks/useElapsedTime';
 
@@ -49,7 +49,7 @@ export const ArchiveDetail: React.FC<ArchiveDetailProps> = ({ recordKey }) => {
           <Clock currentTime={new Date(currentData.timestamp)} />
         </div>
         <div>
-          <DeviceOrientationRange data={selectedData} currentData={currentData} />
+          <DeviceOrientationRecord data={selectedData} currentData={currentData} />
         </div>
       </div>
       <div className="flex gap-x-4">

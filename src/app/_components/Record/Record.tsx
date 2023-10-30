@@ -4,17 +4,17 @@ import { Dialog, useDialog } from '@/app/_components/Dialog';
 import { getText } from './utils';
 
 export type RecordProps = {
-  isRecording?: boolean;
-  onStart?: () => void;
-  onStop?: () => void;
+  isRecording: boolean;
+  onStart: () => void;
+  onStop: () => void;
 };
 export const Record: React.FC<RecordProps> = ({ isRecording, onStart, onStop }) => {
   const { ref, open, close } = useDialog();
   const handleAction = () => {
     if (isRecording) {
-      onStop?.();
+      onStop();
     } else {
-      onStart?.();
+      onStart();
     }
     close();
   };

@@ -1,6 +1,6 @@
 'use client';
 import { Clock } from '@/app/_components/Clock';
-import { DeviceOrientation } from '@/app/_components/DeviceOrientation';
+import { DeviceOrientationRealtime } from '@/app/_components/DeviceOrientationRealtime';
 import { useClock } from '@/app/_hooks/useClock';
 
 const Home = () => {
@@ -12,7 +12,7 @@ const Home = () => {
         <Clock currentTime={currentTime} />
       </div>
       <div>
-        <DeviceOrientation />
+        <DeviceOrientationRealtime />
       </div>
     </div>
   );

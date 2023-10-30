@@ -7,7 +7,7 @@ type ClockProps = {
 };
 export const Clock: React.FC<ClockProps> = ({ currentTime }) => {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-8 text-center">
+    <div className="flex flex-wrap items-center justify-center gap-8 text-center lg:flex-col">
       <div>
         <AnalogClock dateTime={currentTime} />
       </div>
