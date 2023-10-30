@@ -1,8 +1,9 @@
 'use client';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { DeviceOrientationValueList } from '@/app/_components/DeviceOrientationValueList';
+import { DeviceOrientationProgressController } from '@/app/_components/DeviceOrientationProgressController';
 import { DeviceOrientationRecrodGraph } from '@/app/_components/DeviceOrientationRecrodGraph';
-import { DeviceOrientationRecordSeekbar } from '../DeviceOrientationRecordSeekbar';
+import { DeviceOrientationRecordSeekbar } from '@/app/_components/DeviceOrientationRecordSeekbar';
 import { useDOMSize, useTimestampRange } from './hooks';
 
 type Data = {
@@ -14,10 +15,12 @@ type Data = {
 type DeviceOrientationRecordProps = {
   data: Data[];
   currentData: Data;
+  onUpdateElapsedTime: (elapsedTime: number) => void;
 };
 export const DeviceOrientationRecord: React.FC<DeviceOrientationRecordProps> = ({
   data,
   currentData,
+  onUpdateElapsedTime,
 }) => {
   const { ref: mvRef, width: mvW, height: mvH } = useDOMSize();
   const { ref: sbRef, width: sbW } = useDOMSize();
@@ -34,11 +37,21 @@ export const DeviceOrientationRecord: React.FC<DeviceOrientationRecordProps> = (
     return result.length > 1 ? result : data;
   }, [data, timestampRange]);
 
+  const handleUpdateCurrentProgress = useCallback(
+    (progress: number) => {
+      const first = data[0].timestamp;
+      const last = data[data.length - 1].timestamp;
+      const elapsedTime = (last - first) * progress;
+      onUpdateElapsedTime(elapsedTime);
+    },
+    [data, onUpdateElapsedTime],
+  );
+
   const currentTimestamp = currentData.timestamp;
 
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto]">
-      <div className="space-y-8">
+      <div>
         <div className="aspect-video w-full" ref={mvRef}>
           <DeviceOrientationRecrodGraph
             data={rangeData}
@@ -47,13 +60,25 @@ export const DeviceOrientationRecord: React.FC<DeviceOrientationRecordProps> = (
             height={mvH}
           />
         </div>
-        <div ref={sbRef} className="w-full outline outline-neutral-700" style={{ height: '100px' }}>
+        <div
+          ref={sbRef}
+          className="mt-8 w-full outline outline-neutral-700"
+          style={{ height: '100px' }}
+        >
           <DeviceOrientationRecordSeekbar
             data={data}
-            onBrush={handleUpdateTimestampRange}
             currentTimestamp={currentTimestamp}
             width={sbW}
             height={100}
+            onBrush={handleUpdateTimestampRange}
+          />
+        </div>
+        <div className="h-6">
+          <DeviceOrientationProgressController
+            data={data}
+            width={sbW}
+            currentTimestamp={currentTimestamp}
+            onUpdateCurrentProgress={handleUpdateCurrentProgress}
           />
         </div>
       </div>

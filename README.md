@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# 概要
 
-First, run the development server:
+[DeviceOrientationEvent](https://developer.mozilla.org/en-US/docs/Web/API/DeviceOrientationEvent)を用いた、デバイスの回転情報のデータを可視化するWebアプリケーション。
+機能は以下の二つ。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- リアルタイムでのデバイスの回転情報の可視化
+  - リアルタイムで現在から30秒間のデバイスの回転情報のデータを折れ線グラフで表示する
+- 録画したデータの再生
+  - 任意の時間で録画したデータを再生する（データはブラウザのIndexedDBに保存）
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 使い方
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 設計情報
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Next.js の App Router を用いてアプリの実装を行いました。
 
-## Learn More
+## 制約
 
-To learn more about Next.js, take a look at the following resources:
+- Google Chorme と Safari for iOS の最新バージョン（2023/10/31日現在）を対象としています。
+- DeviceOrientationEvent: iPhoneで `DeviceOrientationEvent` のデータを取得する場合、[`requestPermission()`](https://www.w3.org/TR/orientation-event/#dom-deviceorientationevent-requestpermission)を用いて明示的に許可する必要があります。
+- データ容量: IndexedDBに保存できるデータ容量には制約があります。大量の録画データを保存しようとする場合、容量制限に気を付ける必要があります。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ライブラリ選定基準
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Next.js
+- D3.js
+- Tailwind CSS
+- Jest
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## その他発生した課題などのトピック情報

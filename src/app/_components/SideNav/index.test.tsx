@@ -19,7 +19,9 @@ describe('SideNav', () => {
       const item = items[index];
       expect(item).toHaveTextContent(nav.label);
       const link = item.querySelector('a');
-      expect(link).toHaveAttribute('href', nav.href);
+      const isHome = nav.href === '/';
+      const href = isHome ? '/' : nav.href.replace(/\/$/, '');
+      expect(link).toHaveAttribute('href', href);
     });
   });
 

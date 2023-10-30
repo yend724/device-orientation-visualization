@@ -12,7 +12,7 @@ export const DeviceOrientationValueList: React.FC<DeviceOrientationValueListProp
   beta,
 }) => {
   return (
-    <dl className="space-y-8">
+    <dl className="space-y-6">
       <DeviceOrientationValue type="alpha" value={alpha} />
       <DeviceOrientationValue type="gamma" value={gamma} />
       <DeviceOrientationValue type="beta" value={beta} />

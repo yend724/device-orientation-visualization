@@ -1,34 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
 import { RecordingList } from '@/app/_components/RecordingList';
-import { readIndexedDBAll } from '@/app/_utils/indexedDB';
-import { deleteIndexedDBValue } from '@/app/_utils/indexedDB';
+import { Link } from '@/app/_components/Link';
+import { useRecordRangeList } from './hooks';
 
-type RangeStore = {
-  start: number;
-  end: number;
-}[];
 export const ArchiveList = () => {
-  const [recordRangeList, setRecordRageList] = useState<RangeStore>([]);
-
-  const handleDelete = (key: number) => {
-    Promise.all([
-      deleteIndexedDBValue('DeviceOrientationVisualizationDB', 'recordStore', key.toString()),
-      deleteIndexedDBValue('DeviceOrientationVisualizationDB', 'rangeStore', key.toString()),
-    ]).then(() => {
-      readIndexedDBAll('DeviceOrientationVisualizationDB', 'rangeStore').then((req) => {
-        const result = req.result as RangeStore;
-        setRecordRageList(result);
-      });
-    });
-  };
-
-  useEffect(() => {
-    readIndexedDBAll('DeviceOrientationVisualizationDB', 'rangeStore').then((req) => {
-      const result = req.result as RangeStore;
-      setRecordRageList(result);
-    });
-  }, []);
+  const { recordRangeList, handleDelete } = useRecordRangeList();
 
   const sortedRecordRangeList = recordRangeList.sort((a, b) => {
     if (a.start < b.start) return 1;
@@ -37,10 +13,13 @@ export const ArchiveList = () => {
   });
 
   return (
-    <div className="grid gap-y-9">
-      <div>
-        <RecordingList recodingList={sortedRecordRangeList} onDelete={handleDelete} />
+    <div className="grid gap-y-12">
+      <div className="flex gap-x-2">
+        <Link href="/">ホーム</Link>
+        <span>{'>'}</span>
+        <p>録画</p>
       </div>
+      <RecordingList recodingList={sortedRecordRangeList} onDelete={handleDelete} />
     </div>
   );
 };

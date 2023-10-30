@@ -16,7 +16,7 @@ export const useRequestAnimationFrame = (
   );
 
   useEffect(() => {
-    loop(0);
+    reqId.current = requestAnimationFrame(loop);
     return () => {
       if (reqId.current) {
         cancelAnimationFrame(reqId.current);

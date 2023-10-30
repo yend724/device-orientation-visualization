@@ -87,6 +87,7 @@ export const useBrushX = ({
       .on('brush', (event) => {
         const startTimestamp = x.invert(event.selection[0]);
         const endTimestamp = x.invert(event.selection[1]);
+        console.log(event);
         onBrush([startTimestamp, endTimestamp]);
       })
       .on('end', (event) => {

@@ -1,50 +1,50 @@
-export const opneIndexedDB = (dbName: string, version = 1): Promise<IDBOpenDBRequest> => {
+export const opneIndexedDB = ({
+  dbName,
+  version = 1,
+  onSuccess,
+  onUpgradeneeded,
+  onError,
+}: {
+  dbName: string;
+  version?: number;
+  onSuccess?: (e: IDBOpenDBRequest) => void;
+  onUpgradeneeded?: (e: IDBOpenDBRequest) => void;
+  onError?: (e: Event) => void;
+}): Promise<IDBOpenDBRequest> => {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(dbName, version);
     request.addEventListener('upgradeneeded', () => {
-      const db = request.result;
-      db.createObjectStore('recordStore', { autoIncrement: true });
-      db.createObjectStore('rangeStore', { autoIncrement: true });
+      onUpgradeneeded?.(request);
     });
-
     request.addEventListener('success', () => {
+      onSuccess?.(request);
       resolve(request);
     });
 
     request.addEventListener('error', (e) => {
       console.error('データベースを開けませんでした');
-      reject(e);
+      onError?.(e);
+      reject(`[${dbName}]データベースを開けませんでした`);
     });
   });
 };
 
-export const saveOrientationData = async (start: number, end: number, data: Blob) => {
-  const request = await opneIndexedDB('DeviceOrientationVisualizationDB', 1);
-
-  const db = request.result;
-  const objectStoreNames = db.objectStoreNames;
-
-  if (objectStoreNames.contains('recordStore')) {
-    const transaction = db.transaction('recordStore', 'readwrite');
-    const store = transaction.objectStore('recordStore');
-    store.add(data, start.toString());
-
-    transaction.addEventListener('complete', () => {
-      console.log('データを追加しました');
-    });
-  } else {
-    console.error('オブジェクトストアが存在しません');
-  }
-
-  if (objectStoreNames.contains('rangeStore')) {
-    const transaction = db.transaction('rangeStore', 'readwrite');
-    const store = transaction.objectStore('rangeStore');
-    store.add({ start, end }, start.toString());
-
-    transaction.addEventListener('complete', () => {
-      console.log('データを追加しました');
-    });
-  }
+export const createObjectStores = (dbName: string, stores: string | string[], version = 1) => {
+  opneIndexedDB({
+    dbName,
+    version,
+    onUpgradeneeded: (result) => {
+      const db = result.result;
+      if (typeof stores === 'string') {
+        db.createObjectStore(stores, { autoIncrement: true });
+      }
+      if (Array.isArray(stores)) {
+        stores.forEach((store) => {
+          db.createObjectStore(store, { autoIncrement: true });
+        });
+      }
+    },
+  });
 };
 
 export const readIndexedDBAll = (
@@ -52,7 +52,7 @@ export const readIndexedDBAll = (
   storeName: string,
 ): Promise<IDBRequest<unknown[]>> => {
   return new Promise(async (resolve, reject) => {
-    const request = await opneIndexedDB(dbName);
+    const request = await opneIndexedDB({ dbName });
     const db = request.result;
     const objectStoreNames = db.objectStoreNames;
     if (objectStoreNames.contains(storeName)) {
@@ -63,7 +63,7 @@ export const readIndexedDBAll = (
         resolve(request);
       });
     } else {
-      reject('オブジェクトストアが存在しません');
+      reject(`[${storeName}]オブジェクトストアが存在しません`);
     }
   });
 };
@@ -73,7 +73,7 @@ export const readIndexedDBAllKeys = (
   storeName: string,
 ): Promise<IDBRequest<IDBValidKey[]>> => {
   return new Promise(async (resolve, reject) => {
-    const request = await opneIndexedDB(dbName, 1);
+    const request = await opneIndexedDB({ dbName });
     const db = request.result;
     const objectStoreNames = db.objectStoreNames;
     if (objectStoreNames.contains(storeName)) {
@@ -84,7 +84,7 @@ export const readIndexedDBAllKeys = (
         resolve(request);
       });
     } else {
-      reject('オブジェクトストアが存在しません');
+      reject(`[${storeName}]オブジェクトストアが存在しません`);
     }
   });
 };
@@ -95,7 +95,7 @@ export const readIndexedDBValue = <T>(
   key: string,
 ): Promise<IDBRequest<T>> => {
   return new Promise(async (resolve, reject) => {
-    const request = await opneIndexedDB(dbName);
+    const request = await opneIndexedDB({ dbName });
     const db = request.result;
     const objectStoreNames = db.objectStoreNames;
     if (objectStoreNames.contains(storeName)) {
@@ -106,7 +106,40 @@ export const readIndexedDBValue = <T>(
         resolve(request);
       });
     } else {
-      reject('オブジェクトストアが存在しません');
+      reject(`[${storeName}]オブジェクトストアが存在しません`);
+    }
+  });
+};
+export const wirteIndexedDBValue = async ({
+  dbName,
+  data,
+  version = 1,
+  storeName,
+}: {
+  dbName: string;
+  data: {
+    key?: IDBValidKey;
+    value: unknown;
+  };
+  version?: number;
+  storeName: string;
+}): Promise<IDBRequest> => {
+  return new Promise(async (resolve, reject) => {
+    const request = await opneIndexedDB({ dbName, version });
+    const db = request.result;
+    const objectStoreNames = db.objectStoreNames;
+
+    if (objectStoreNames.contains(storeName)) {
+      const transaction = db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      store.add(data.value, data.key);
+
+      transaction.addEventListener('complete', () => {
+        console.log('データを追加しました');
+        resolve(request);
+      });
+    } else {
+      reject(`[${storeName}]オブジェクトストアが存在しません`);
     }
   });
 };
@@ -116,7 +149,7 @@ export const deleteIndexedDBValue = (
   key: string,
 ): Promise<IDBRequest> => {
   return new Promise(async (resolve, reject) => {
-    const request = await opneIndexedDB(dbName);
+    const request = await opneIndexedDB({ dbName });
     const db = request.result;
     const objectStoreNames = db.objectStoreNames;
     if (objectStoreNames.contains(storeName)) {
@@ -127,7 +160,7 @@ export const deleteIndexedDBValue = (
         resolve(request);
       });
     } else {
-      reject('オブジェクトストアが存在しません');
+      reject(`[${storeName}]オブジェクトストアが存在しません`);
     }
   });
 };

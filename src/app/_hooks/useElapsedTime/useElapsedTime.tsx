@@ -11,6 +11,9 @@ export const useElapsedTime = () => {
   const stop = useCallback(() => {
     setIsRunning(false);
   }, []);
+  const update = useCallback((time: number) => {
+    setElapsedTime(time);
+  }, []);
   const reset = useCallback(() => {
     setElapsedTime(0);
   }, []);
@@ -40,5 +43,5 @@ export const useElapsedTime = () => {
     };
   }, [loop]);
 
-  return { start, stop, reset, isRunning, elapsedTime };
+  return { start, stop, reset, update, isRunning, elapsedTime };
 };

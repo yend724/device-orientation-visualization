@@ -5,6 +5,6 @@ export const NAV_LIST = [
   },
   {
     label: '録画',
-    href: '/archive',
+    href: '/archive/',
   },
 ] as const;

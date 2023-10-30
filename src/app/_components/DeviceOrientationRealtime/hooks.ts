@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { convertArrayToBlob } from '@/app/_utils/blob';
-import { saveOrientationData } from '@/app/_utils/indexedDB';
+import { saveOrientationData } from './utils';
 
 export const useDOMSize = () => {
   const [size, setSize] = useState([0, 0]);
