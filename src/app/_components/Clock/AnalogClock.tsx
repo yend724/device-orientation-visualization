@@ -8,7 +8,7 @@ export const AnalogClock: React.FC<AnalogClockProps> = ({ dateTime }) => {
   const { hours, minutes, seconds } = splitDateTime(dateTime);
 
   return (
-    <div className="relative h-[200px] w-[200px] rounded-full bg-neutral-800">
+    <div className="relative aspect-[1/1] w-[12rem] rounded-full bg-neutral-800 sm:w-[15rem]">
       <div
         style={{ '--rotate-deg': `${(hours + minutes / 60) * 30 - 90}deg` } as CSSProperties}
         className="absolute left-1/2 top-1/2 z-10 h-[6px] w-[30%] origin-[center_left] rotate-[var(--rotate-deg)] bg-neutral-50"

@@ -23,7 +23,7 @@ export const MainVisualGraph: React.FC<MainVisualGraphProps> = ({
   const gy = useRef<SVGSVGElement>(null);
 
   const margin = useMemo(() => {
-    return { top: 20, right: 20, bottom: 20, left: 60 };
+    return { top: 20, right: 20, bottom: 20, left: 50 };
   }, []);
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
@@ -72,20 +72,33 @@ export const MainVisualGraph: React.FC<MainVisualGraphProps> = ({
         .ticks(4)
         .tickFormat((d) => {
           const date = new Date(d as number);
+          if (width < 640) {
+            return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+          }
           return `${
             date.getMonth() + 1
-          }/${date.getDate()}/${date.getHours()} ${date.getMinutes()}:${date.getSeconds()}`;
+          }/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
         }),
     );
     return () => {
       d3.select(targetElement).selectAll('g').remove();
     };
-  }, [gx, x]);
+  }, [gx, x, width]);
 
   useEffect(() => {
     const targetElement = gy.current;
     if (!targetElement) return;
-    d3.select(targetElement).call(d3.axisLeft(y).tickValues([-180, -90, 0, 90, 180, 270, 360]));
+    d3.select(targetElement).call(
+      d3
+        .axisLeft(y)
+        .tickValues([-180, -90, 0, 90, 180, 270, 360])
+        .tickFormat((d) => {
+          if (d === 360) {
+            return '360deg';
+          }
+          return `${d}`;
+        }),
+    );
     return () => {
       d3.select(targetElement).selectAll('g').remove();
     };

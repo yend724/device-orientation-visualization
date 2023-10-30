@@ -39,12 +39,12 @@ export const ArchiveDetail: React.FC<ArchiveDetailProps> = ({ recordKey }) => {
   const targetRecordData =
     selectedData.find((data) => data.timestamp >= firstRecordData.timestamp + elapsedTime) ??
     selectedData[selectedData.length - 1];
-
   const currentData = targetRecordData!;
+
   return (
     <div className="grid gap-y-12">
       <Link href="/archive">録画一覧に戻る</Link>
-      <div className="grid grid-cols-[auto_1fr] gap-x-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[auto_1fr]">
         <div>
           <Clock currentTime={new Date(currentData.timestamp)} />
         </div>
@@ -54,7 +54,7 @@ export const ArchiveDetail: React.FC<ArchiveDetailProps> = ({ recordKey }) => {
       </div>
       <div className="flex gap-x-4">
         <Button onClick={start} disabled={isRunning}>
-          開始
+          再生
         </Button>
         <Button onClick={stop} disabled={!isRunning}>
           停止

@@ -23,7 +23,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <aside className="border-r border-solid border-neutral-700">
             <SideNav />
           </aside>
-          <main className="grid grid-cols-[1fr_1rem] overflow-scroll py-8 pl-4 after:content-['']">
+          <main className="grid grid-cols-[1fr_1rem] overflow-y-auto py-8 pl-4 after:content-['']">
             <div>{children}</div>
           </main>
         </div>

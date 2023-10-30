@@ -21,7 +21,7 @@ export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProp
   const gx = useRef<SVGSVGElement>(null);
   const gy = useRef<SVGSVGElement>(null);
 
-  const margin = { top: 20, right: 20, bottom: 20, left: 60 };
+  const margin = { top: 20, right: 20, bottom: 20, left: 50 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
@@ -62,18 +62,21 @@ export const DeviceOrientationLineGraph: React.FC<DeviceOrientationLineGraphProp
     if (!targetElement) return;
 
     d3.select(targetElement).call(
-      d3.axisBottom(x).tickFormat((d) => {
-        if (d === 0) {
-          return '0秒前';
-        }
-        return `${d}`;
-      }),
+      d3
+        .axisBottom(x)
+        .ticks(width > 640 ? 15 : 5)
+        .tickFormat((d) => {
+          if (d === 0) {
+            return '0秒前';
+          }
+          return `${d}`;
+        }),
     );
 
     return () => {
       d3.select(targetElement).selectAll('g').remove();
     };
-  }, [gx, x]);
+  }, [gx, x, width]);
 
   useEffect(() => {
     const targetElement = gy.current;

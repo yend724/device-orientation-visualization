@@ -48,7 +48,7 @@ export const LineGraph: React.FC<LineGraphProps> = ({
         <MainVisualGraph
           data={rangeData}
           width={width}
-          height={height - 50 - 16}
+          height={Math.max(0, height - 50 - 16)}
           currentTimestamp={currentTimestamp}
         />
       </div>

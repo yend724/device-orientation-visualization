@@ -40,8 +40,8 @@ export const DeviceOrientationRange: React.FC<DeviceOrientationRangeProps> = ({
   }, []);
 
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-x-4">
-      <div ref={callbackRef} className="relative aspect-video w-full min-w-[40rem]">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto]">
+      <div ref={callbackRef} className="relative aspect-video w-full">
         <div className="absolute h-full w-full">
           <LineGraph
             data={data}

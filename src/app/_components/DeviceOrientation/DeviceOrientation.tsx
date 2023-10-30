@@ -81,8 +81,8 @@ export const DeviceOrientation = () => {
   }, [isRecording]);
 
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-8">
-      <div ref={callbackRef} className="relative aspect-video w-full min-w-[40rem]">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto]">
+      <div ref={callbackRef} className="relative aspect-video w-full">
         <div className="absolute h-full w-full">
           <DeviceOrientationLineGraph
             width={size.width}
@@ -91,9 +91,11 @@ export const DeviceOrientation = () => {
           />
         </div>
       </div>
-      <div>
-        <DeviceOrientationValues alpha={alpha} gamma={gamma} beta={beta} />
-        <div className="mt-8">
+      <div className="grid grid-rows-[auto_1fr] gap-y-12">
+        <div>
+          <DeviceOrientationValues alpha={alpha} gamma={gamma} beta={beta} />
+        </div>
+        <div>
           <Record onStart={startRecording} onStop={stopRecording} isRecording={isRecording} />
         </div>
       </div>
