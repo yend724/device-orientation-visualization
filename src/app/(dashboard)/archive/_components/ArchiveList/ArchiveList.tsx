@@ -1,6 +1,6 @@
 'use client';
 import { RecordingList } from '@/app/_components/RecordingList';
-import { Link } from '@/app/_components/Link';
+import { BreadCrumbs } from '@/app/_components/Breadcrumbs';
 import { useRecordRangeList } from './hooks';
 
 export const ArchiveList = () => {
@@ -14,11 +14,12 @@ export const ArchiveList = () => {
 
   return (
     <div className="grid gap-y-12">
-      <div className="flex gap-x-2">
-        <Link href="/">ホーム</Link>
-        <span>{'>'}</span>
-        <p>録画</p>
-      </div>
+      <BreadCrumbs
+        paths={[
+          { label: 'ホーム', href: '/' },
+          { label: '録画', href: '/archive' },
+        ]}
+      />
       <RecordingList recodingList={sortedRecordRangeList} onDelete={handleDelete} />
     </div>
   );

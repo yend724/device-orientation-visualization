@@ -15,11 +15,13 @@ type Data = {
 type DeviceOrientationRecordProps = {
   data: Data[];
   currentData: Data;
+  trigger: React.ReactNode;
   onUpdateElapsedTime: (elapsedTime: number) => void;
 };
 export const DeviceOrientationRecord: React.FC<DeviceOrientationRecordProps> = ({
   data,
   currentData,
+  trigger,
   onUpdateElapsedTime,
 }) => {
   const { ref: mvRef, width: mvW, height: mvH } = useDOMSize();
@@ -84,6 +86,7 @@ export const DeviceOrientationRecord: React.FC<DeviceOrientationRecordProps> = (
       </div>
       <div>
         <DeviceOrientationValueList {...currentData} />
+        <div className="mt-12 flex gap-x-4">{trigger}</div>
       </div>
     </div>
   );
