@@ -113,13 +113,16 @@ Next.js のドキュメントにある [Project Organization and File Colocation
   - テストは経験が浅いので、利用者が多く情報量が取得しやすい Jest / React Testing Library を使用しました。
 
 ## その他発生した課題などのトピック情報
-- IndexedDBに保存できる容量
-  - [ブラウザーのストレージ制限と削除基準 - Web API | MDN](https://developer.mozilla.org/ja/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria) によると各ブラウザやOSによってストレージの制限は異なるようでした。
-  - [Indexed Database API 3.0](https://w3c.github.io/IndexedDB/#ref-for-quotaexceedederror%E2%91%A5:~:text=If%20an%20error%20occurs%20while%20writing%20the%20changes%20to%20the%20database%2C%20then%20run%20abort%20a%20transaction%20with%20transaction%20and%20an%20appropriate%20type%20for%20the%20error%2C%20for%20example%20%22QuotaExceededError%22%20or%20%22UnknownError%22%20DOMException%2C%20and%20terminate%20these%20steps) の該当箇所を読むと容量制限を超えた場合、`transaction`エラーが発生し、書き込み自体が失敗するように思えましたが、検証まではできていないので今後の課題。
+
 - テストの経験が浅いので参考にした教材
   - [フロントエンド開発のためのテスト入門 今からでも知っておきたい自動テスト戦略の必須知識](https://amzn.asia/d/ejDzZkz)
   - [Jestではじめるテスト入門](https://peaks.cc/books/testing_with_jest)
   - Storybook を使った「ビジュアルリグレッションテスト」は導入しなかったので今後の課題。
+- IndexedDBに保存できる容量
+  - [ブラウザーのストレージ制限と削除基準 - Web API | MDN](https://developer.mozilla.org/ja/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria) によると各ブラウザやOSによってストレージの制限は異なるようでした。
+  - [Indexed Database API 3.0](https://w3c.github.io/IndexedDB/#ref-for-quotaexceedederror%E2%91%A5:~:text=If%20an%20error%20occurs%20while%20writing%20the%20changes%20to%20the%20database%2C%20then%20run%20abort%20a%20transaction%20with%20transaction%20and%20an%20appropriate%20type%20for%20the%20error%2C%20for%20example%20%22QuotaExceededError%22%20or%20%22UnknownError%22%20DOMException%2C%20and%20terminate%20these%20steps) の該当箇所を読むと容量制限を超えた場合、`transaction`エラーが発生し、書き込み自体が失敗するように思えましたが、検証まではできていないので今後の課題。
+- IndexedDBの挙動のテスト
+  - [fake-indexeddb](https://www.npmjs.com/package/fake-indexeddb) を使用しました。
 - パフォーマンス
   - 録画に関して、5分ほど録画して検証してみましたが、録画中も再生中も30FPS以上は確保しているように見えました（[react-fps](https://github.com/JohannesKlauss/react-fps)を用いて確認）。
   - [Rust and WebAssembly](https://rustwasm.github.io/docs/book/) を以前試したことがあったので WebAssembly を取り入れてみたかったが、導入できなかったので今後の課題。
