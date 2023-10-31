@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
 import * as d3 from 'd3';
 
-type OrientationData = {
+export type OrientationData = {
   timestamp: number;
   gamma: number;
   alpha: number;
   beta: number;
 };
-
 export const useScaleLinear = ({ data, width }: { data: OrientationData[]; width: number }) => {
   const x = useMemo(() => {
     const first = data[0];

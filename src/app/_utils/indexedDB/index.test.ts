@@ -12,6 +12,7 @@ import 'fake-indexeddb/auto';
 global.structuredClone = jest.fn((val) => {
   return JSON.parse(JSON.stringify(val));
 });
+
 describe('IndexedDB', () => {
   const dbName = 'testDB';
   const storeName = 'testStore';
