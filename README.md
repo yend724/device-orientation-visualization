@@ -13,6 +13,23 @@
 
 https://yend724.github.io/device-orientation-visualization/
 
+## 開発環境
+
+### 要件
+
+- Node.js v18.18.0
+
+### コマンド
+
+```shell
+$ npm run install # 必要モジュールのインストール
+$ npm run dev # 開発サーバーの立ち上げ
+$ npm run test # テストを走らせる
+$ npm run format # リンターとフォーマッタを走らせる
+$ npm run build # ビルドを行う
+$ npm run deploy # デプロイをする
+```
+
 ## 使い方
 
 [ホーム画面](https://yend724.github.io/device-orientation-visualization/)と[録画画面](https://yend724.github.io/device-orientation-visualization/archive/)の2つの画面が存在します。
