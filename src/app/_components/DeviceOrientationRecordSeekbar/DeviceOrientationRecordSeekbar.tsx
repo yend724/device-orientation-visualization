@@ -45,7 +45,6 @@ export const DeviceOrientationRecordSeekbar: React.FC<DeviceOrientationRecordSee
         strokeWidth="2"
         d={line(beta)!}
       />
-      <g ref={brushXRef} />
       <line
         x1={currentLinePoositionX}
         x2={currentLinePoositionX}
@@ -55,6 +54,7 @@ export const DeviceOrientationRecordSeekbar: React.FC<DeviceOrientationRecordSee
         className={STROKE_COLORS.PROGRESS_LINE}
         strokeWidth={4}
       />
+      <g ref={brushXRef} />
     </svg>
   );
 };

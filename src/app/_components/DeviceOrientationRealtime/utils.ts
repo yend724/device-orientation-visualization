@@ -1,4 +1,4 @@
-import { wirteIndexedDBValue } from '@/app/_utils/indexedDB';
+import { opneIndexedDB, wirteIndexedDBValue } from '@/app/_utils/indexedDB';
 
 type OrientationData = {
   alpha: number;
@@ -18,16 +18,22 @@ export const filterArrayByTimestamp = (
 };
 
 export const saveOrientationData = async (start: number, end: number, data: Blob) => {
-  Promise.all([
-    wirteIndexedDBValue({
-      dbName: 'DeviceOrientationVisualizationDB',
-      data: { key: start.toString(), value: data },
-      storeName: 'recordStore',
-    }),
-    wirteIndexedDBValue({
-      dbName: 'DeviceOrientationVisualizationDB',
-      data: { key: start.toString(), value: { start, end } },
-      storeName: 'rangeStore',
-    }),
-  ]);
+  await opneIndexedDB({
+    dbName: 'DeviceOrientationVisualizationDB',
+    onUpgradeneeded: (request) => {
+      const db = request.result;
+      db.createObjectStore('recordStore', { autoIncrement: true });
+      db.createObjectStore('rangeStore', { autoIncrement: true });
+    },
+  });
+  wirteIndexedDBValue({
+    dbName: 'DeviceOrientationVisualizationDB',
+    data: { key: start.toString(), value: data },
+    storeName: 'recordStore',
+  });
+  wirteIndexedDBValue({
+    dbName: 'DeviceOrientationVisualizationDB',
+    data: { key: start.toString(), value: { start, end } },
+    storeName: 'rangeStore',
+  });
 };

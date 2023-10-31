@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { STROKE_COLORS } from '@/app/_constants/orientation';
+import { FILL_COLORS, STROKE_COLORS } from '@/app/_constants/orientation';
 import { twMerge } from 'tailwind-merge';
 import { useScaleLinear } from './hooks';
 
@@ -46,7 +46,12 @@ export const DeviceOrientationProgressController: React.FC<
         cx={x(currentTimestamp)}
         cy="10"
         r="8"
-        className={twMerge(STROKE_COLORS.PROGRESS_LINE, 'cursor-pointer')}
+        strokeWidth={1}
+        className={twMerge(
+          STROKE_COLORS.PROGRESS_LINE,
+          FILL_COLORS.PROGRESS_LINE,
+          'cursor-pointer',
+        )}
       ></circle>
     </svg>
   );

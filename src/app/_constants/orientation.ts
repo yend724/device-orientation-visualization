@@ -4,7 +4,9 @@ export const STROKE_COLORS = {
   BETA: 'stroke-sky-300',
   PROGRESS_LINE: 'stroke-red-500',
 } as const;
-
+export const FILL_COLORS = {
+  PROGRESS_LINE: 'fill-red-500',
+} as const;
 export const VALUE_MAP = {
   alpha: 'ALPHA',
   gamma: 'GAMMA',

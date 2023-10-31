@@ -9,7 +9,7 @@ import { useDOMSize, useRealtimeOrientationData, useRecordOrientationData } from
 import { filterArrayByTimestamp } from './utils';
 
 export const DeviceOrientationRealtime = () => {
-  const { alpha, gamma, beta, isPermission, permission } = useDeviceOrientation();
+  const { alpha, gamma, beta, isPermission, requestPermission } = useDeviceOrientation();
   const { width, height, ref } = useDOMSize();
 
   const { realtimeData, handleUpdateRealtimeData } = useRealtimeOrientationData();
@@ -45,7 +45,7 @@ export const DeviceOrientationRealtime = () => {
         </div>
         <div>
           <div className="flex flex-wrap gap-x-4">
-            <Button onClick={permission} disabled={isPermission}>
+            <Button onClick={requestPermission} disabled={isPermission}>
               {isPermission ? '許可済み' : '許可する'}
             </Button>
             <Record

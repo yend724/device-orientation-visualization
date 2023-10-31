@@ -125,7 +125,10 @@ export const wirteIndexedDBValue = async ({
   storeName: string;
 }): Promise<IDBRequest> => {
   return new Promise(async (resolve, reject) => {
-    const request = await opneIndexedDB({ dbName, version });
+    const request = await opneIndexedDB({
+      dbName,
+      version,
+    });
     const db = request.result;
     const objectStoreNames = db.objectStoreNames;
 

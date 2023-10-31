@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { deleteIndexedDBValue, readIndexedDBAll } from '@/app/_utils/indexedDB';
+import { opneIndexedDB, deleteIndexedDBValue, readIndexedDBAll } from '@/app/_utils/indexedDB';
 
 type RangeStore = {
   start: number;
@@ -21,9 +21,18 @@ export const useRecordRangeList = () => {
   };
 
   useEffect(() => {
-    readIndexedDBAll('DeviceOrientationVisualizationDB', 'rangeStore').then((req) => {
-      const result = req.result as RangeStore;
-      setRecordRageList(result);
+    opneIndexedDB({
+      dbName: 'DeviceOrientationVisualizationDB',
+      onUpgradeneeded: (request) => {
+        const db = request.result;
+        db.createObjectStore('recordStore');
+        db.createObjectStore('rangeStore');
+      },
+    }).then(() => {
+      readIndexedDBAll('DeviceOrientationVisualizationDB', 'rangeStore').then((req) => {
+        const result = req.result as RangeStore;
+        setRecordRageList(result);
+      });
     });
   }, []);
 

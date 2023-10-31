@@ -18,23 +18,25 @@ export const RecordingList: React.FC<RecordingListProps> = ({ recodingList, onDe
   return (
     <div>
       {recodingList.length === 0 && <p>録画はありません</p>}
-      <ul className="grid list-disc gap-y-4 pl-4 empty:hidden">
-        {recodingList.map((record) => {
-          const { start, end } = record;
-          return (
-            <li key={start}>
-              <div className="flex items-center gap-x-4">
-                <Link href={createPath(`${location.pathname}`, { recordKey: start })}>
-                  {new Date(start).toLocaleString()} ~ {new Date(end).toLocaleString()}の録画
-                </Link>
-                <Button size="small" variant="secondary" onClick={() => handleDelete(start)}>
-                  削除
-                </Button>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      {recodingList.length > 0 && (
+        <ul className="grid list-disc gap-y-4 pl-4">
+          {recodingList.map((record) => {
+            const { start, end } = record;
+            return (
+              <li key={start}>
+                <div className="flex items-center gap-x-4">
+                  <Link href={createPath(`${location.pathname}`, { recordKey: start })}>
+                    {new Date(start).toLocaleString()} ~ {new Date(end).toLocaleString()}の録画
+                  </Link>
+                  <Button size="small" variant="secondary" onClick={() => handleDelete(start)}>
+                    削除
+                  </Button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 };

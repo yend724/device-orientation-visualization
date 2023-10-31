@@ -1,3 +1,4 @@
+import { getSessionStorage, setSessionStorage } from '@/app/_utils/sessionStorage';
 import { useEffect, useState, useCallback } from 'react';
 
 declare const DeviceOrientationEvent: {
@@ -6,60 +7,66 @@ declare const DeviceOrientationEvent: {
 
 export const useDeviceOrientation = () => {
   const [isPermission, setIsPermission] = useState(false);
-  const [absortController] = useState(() => new AbortController());
   const [orientation, setOrientation] = useState({
     alpha: 0,
     beta: 0,
     gamma: 0,
   });
 
-  const registerEvents = useCallback(() => {
-    setIsPermission(true);
-    window.addEventListener(
-      'deviceorientation',
-      (event) => {
-        const { alpha, beta, gamma } = event;
-        setOrientation({
-          alpha: alpha ?? 0,
-          beta: beta ?? 0,
-          gamma: gamma ?? 0,
-        });
-      },
-      { signal: absortController.signal },
-    );
-    return { absortController };
-  }, [absortController]);
-
-  const permission = () => {
-    if (DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
+  const requestPermission = useCallback(() => {
+    if (window?.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
       DeviceOrientationEvent.requestPermission().then((event) => {
         if (event === 'granted') {
           setIsPermission(true);
+          setSessionStorage('isDeviceRotationPermission', 'true');
         } else {
           alert('デバイス向きの取得の許可をしてください');
+          setSessionStorage('isDeviceRotationPermission', 'false');
         }
       });
     }
-  };
+    setIsPermission(true);
+    setSessionStorage('isDeviceRotationPermission', 'true');
+  }, []);
 
   useEffect(() => {
-    let absortController: AbortController | null = null;
-    if (DeviceOrientationEvent && !DeviceOrientationEvent.requestPermission) {
+    const result = getSessionStorage('isDeviceRotationPermission');
+    if (result) {
+      const currentPermission = result === 'true';
+      setIsPermission(currentPermission);
+    }
+  }, []);
+
+  useEffect(() => {
+    const absortController = new AbortController();
+
+    if (window?.DeviceOrientationEvent && !DeviceOrientationEvent.requestPermission) {
       setIsPermission(true);
     }
+
     if (isPermission) {
-      const result = registerEvents();
-      absortController = result.absortController;
+      setIsPermission(true);
+      window.addEventListener(
+        'deviceorientation',
+        (event) => {
+          const { alpha, beta, gamma } = event;
+          setOrientation({
+            alpha: alpha ?? 0,
+            beta: beta ?? 0,
+            gamma: gamma ?? 0,
+          });
+        },
+        { signal: absortController.signal },
+      );
     }
     return () => {
-      setIsPermission(false);
-      absortController?.abort();
+      absortController.abort();
     };
-  }, [absortController, isPermission, registerEvents]);
+  }, [isPermission]);
 
   return {
     ...orientation,
     isPermission,
-    permission,
+    requestPermission,
   };
 };
