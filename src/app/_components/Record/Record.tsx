@@ -23,13 +23,13 @@ export const Record: React.FC<RecordProps> = ({ isRecording, onStart, onStop }) 
 
   return (
     <>
-      <Button onClick={open}>
+      <Button onClick={open} data-testid="trigger">
         <span>{text.trigger}する</span>
       </Button>
       <Dialog ref={ref}>
         <h2 className="px-6 py-4 text-lg">録画を{text.title}しますか？</h2>
         <div className="flex gap-4 px-6 py-4 text-end">
-          <Button onClick={handleAction} size="small">
+          <Button onClick={handleAction} size="small" data-testid="action">
             {text.action}する
           </Button>
           <Button onClick={close} autoFocus variant="secondary" size="small">

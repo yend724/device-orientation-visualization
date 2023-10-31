@@ -12,6 +12,17 @@ export const useDeviceOrientation = () => {
     beta: 0,
     gamma: 0,
   });
+  const handleUpdate = useCallback(
+    (event: DeviceOrientationEvent) => {
+      const { alpha, beta, gamma } = event;
+      setOrientation({
+        alpha: alpha ?? 0,
+        beta: beta ?? 0,
+        gamma: gamma ?? 0,
+      });
+    },
+    [setOrientation],
+  );
 
   const requestPermission = useCallback(() => {
     if (window?.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
@@ -24,9 +35,10 @@ export const useDeviceOrientation = () => {
           setSessionStorage('isDeviceRotationPermission', 'false');
         }
       });
+    } else {
+      setIsPermission(true);
+      setSessionStorage('isDeviceRotationPermission', 'true');
     }
-    setIsPermission(true);
-    setSessionStorage('isDeviceRotationPermission', 'true');
   }, []);
 
   useEffect(() => {
@@ -46,26 +58,18 @@ export const useDeviceOrientation = () => {
 
     if (isPermission) {
       setIsPermission(true);
-      window.addEventListener(
-        'deviceorientation',
-        (event) => {
-          const { alpha, beta, gamma } = event;
-          setOrientation({
-            alpha: alpha ?? 0,
-            beta: beta ?? 0,
-            gamma: gamma ?? 0,
-          });
-        },
-        { signal: absortController.signal },
-      );
+      window.addEventListener('deviceorientation', handleUpdate, {
+        signal: absortController.signal,
+      });
     }
     return () => {
       absortController.abort();
     };
-  }, [isPermission]);
+  }, [isPermission, handleUpdate]);
 
   return {
     ...orientation,
+    handleUpdate,
     isPermission,
     requestPermission,
   };
