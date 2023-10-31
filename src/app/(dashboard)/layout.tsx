@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Header } from '@/app/_components/Header';
 import { SideNav } from '@/app/_components/SideNav';
-import { FpsView } from '@/app/_components/FpsView';
+// import { FpsView } from '@/app/_components/FpsView';
 import { META } from '@/app/_constants/meta';
 import '@/app/_styles/globals.css';
 
@@ -28,7 +28,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           </main>
         </div>
         {/* TODO最後に消す */}
-        <FpsView />
+        {/* <FpsView /> */}
       </body>
     </html>
   );
